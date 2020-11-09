@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class SudokuBoard extends JPanel implements MouseListener {
+class SudokuBoard extends JPanel implements MouseListener, KeyListener {
 	/*
 	This class is for testing proper rendering and mouse controls while
 	supporting and reacting to window size changes. We need to figure
@@ -31,6 +31,9 @@ class SudokuBoard extends JPanel implements MouseListener {
 
 	SudokuBoard() {
 		this.addMouseListener(this);
+		this.addKeyListener(this); 
+		setFocusable(true);
+		setFont(getFont().deriveFont(20f));
 	
 		// Element widths we'll be dealing with.
 		final int
@@ -151,6 +154,53 @@ class SudokuBoard extends JPanel implements MouseListener {
 			}
 			y += heights[o];
 		}
+		
+		// Now fill in the tile values. Due to the way we've designed things,
+		// this is quite messed up (offset math, not sensible). Don't worry if
+		// it doesn't make sense, I'm just throwing this on top..
+		for (int oy = 0; oy < board.length; ++oy) {
+			int yElementsOff = 1 + (oy * 2);
+			for (int ox = 0; ox < board[oy].length; ++ox) {
+				int xElementsOff = 1 + (ox * 2);
+				
+				int value = board[oy][ox];
+				if (value == 0) continue;
+				
+				int xPositionOfTile = xElements[xElementsOff];
+				int yPositionOfTile = yElements[yElementsOff];
+				// It wouldn't be inappropriate to use Graphics#drawImage here,
+				// having a picture for every number, matching the tile size.
+				// But we'll use drawString..
+				
+				int tileWidth = widths[xElementsOff];
+				int tileHeight = heights[yElementsOff];
+				// I know, the variable names don't match, but,
+				// the offset should be the same for either case.
+				
+				FontMetrics fm = g.getFontMetrics();							
+				// What we want to do is horizontally and vertically
+				// center the tile value inside the cell.
+				
+				String valueString = Integer.toString(value);
+				int stringWidth = fm.stringWidth(valueString);
+				int stringHeight = fm.getAscent();
+				
+				int stringXOffset = ((tileWidth - stringWidth) / 2);
+				int stringYOffset = ((tileHeight + stringHeight) / 2);
+				// "Why plus here?" Actually it's
+				// ((tileHeight - stringHeight) / 2) + stringHeight.
+				// The first part gets us the y offset for the *top*
+				// of the string. And we know that Graphics#drawString
+				// wants the Y for the baseline, so we sort of add that
+				// string height into there.
+				
+				g.drawString(
+					valueString,
+					xOffset + xPositionOfTile + stringXOffset, 
+					yOffset + yPositionOfTile + stringYOffset
+				);
+			}
+		}
 	}
 	
 	
@@ -215,5 +265,31 @@ class SudokuBoard extends JPanel implements MouseListener {
 	public void mouseEntered(MouseEvent eM) { }
 	public void mousePressed(MouseEvent eM) { }
 	public void mouseReleased(MouseEvent eM) { }
+	
+	
+	public void keyTyped(KeyEvent eK) {
+		if (!hasSelected) return;
+		
+		int bx = (xSelected - 1) / 2;
+		int by = (ySelected - 1) / 2;
+		
+		switch (eK.getKeyChar()) {
+			case '1': board[by][bx] = 1; break;
+			case '2': board[by][bx] = 2; break;
+			case '3': board[by][bx] = 3; break;
+			case '4': board[by][bx] = 4; break;
+			case '5': board[by][bx] = 5; break;
+			case '6': board[by][bx] = 6; break;
+			case '7': board[by][bx] = 7; break;
+			case '8': board[by][bx] = 8; break;
+			case '9': board[by][bx] = 9; break;
+			case '0': board[by][bx] = 0; break;
+		}
+		
+		repaint();
+	}
+	
+	public void keyPressed(KeyEvent eK) { }
+	public void keyReleased(KeyEvent eK) { }
 
 }
