@@ -108,7 +108,7 @@ class DetectionI extends JPanel implements MouseMotionListener {
 			int left = x;
 			int right = left + widths[o];
 			
-			// X no longer needed, increment it now.
+			// x no longer needed, increment it now.
 			x = right;
 			
 			boolean cursorXWithin = 
@@ -131,5 +131,5 @@ class DetectionI extends JPanel implements MouseMotionListener {
 	}
 	
 	public void mouseDragged(MouseEvent eM) { }
-	
+
 }
