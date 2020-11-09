@@ -97,9 +97,6 @@ class DetectionI extends JPanel implements MouseMotionListener {
 		int cursorX = eM.getX() - xOffset;
 		int cursorY = eM.getY() - yOffset;
 		
-		// Theoretically we can still be out of bounds - too far right or down.
-		// But we'll ignore that for our calculations.
-		
 		// We know that each component has a bounding area. The cursor is
 		// hovering over some component if the cursor's coordinates is
 		// within that component's bounding area.
