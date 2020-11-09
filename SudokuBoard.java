@@ -46,7 +46,7 @@ class SudokuBoard extends JPanel {
 		// So we draw the tiles first as a simple grid, and then we paint
 		// grid lines on top of where they meet. Only for rendering.
 		// Therefore, we increase the tile size a bit so that the
-		// exposed area after painting the grid lines will come back to.
+		// exposed area after painting the grid lines will come back to..
 		
 		// So. Fill the board area first.
 		int boardWidth = tileWidth * 9;
@@ -60,8 +60,11 @@ class SudokuBoard extends JPanel {
 		// Selected tile, paint a different colour.
 		// Otherwise, paint the filled number if present.
 		
+		
+		// Now, let's paint the grid lines.
 		g.setColor(getForeground());
-		// Now we'll iterate over the equally-spaced tile boundaries.
+		
+		// We'll iterate over those equally-spaced tile boundaries.
 		for (int column = 1; column <= 9 + 1; ++column) {
 			int left = (column - 1) * tileWidth;
 			
